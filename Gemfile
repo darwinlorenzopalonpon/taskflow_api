@@ -56,7 +56,7 @@ group :development, :test do
 
   gem "dotenv-rails"
 
-  gem 'pry', '~> 0.15.0'
-  gem 'better_errors'
-  gem 'binding_of_caller'
+  gem "pry", "~> 0.15.0"
+  gem "better_errors"
+  gem "binding_of_caller"
 end

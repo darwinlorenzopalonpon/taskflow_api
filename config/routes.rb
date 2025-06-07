@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  # OmniAuth routes at root level
+  get "/auth/:provider/callback", to: "api/v1/auth#callback"
+  get "/auth/failure", to: "api/v1/auth#failure"
+
   namespace :api do
     namespace :v1 do
       get "projects/index"
@@ -11,8 +15,6 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       # Auth routes
-      get "/auth/:provider/callback", to: "auth#:provider"
-      get "/auth/failure", to: "auth#failure"
       get "/auth/me", to: "auth#me"
 
       # Other API resources

@@ -55,4 +55,8 @@ group :development, :test do
   gem "factory_bot_rails"
 
   gem "dotenv-rails"
+
+  gem 'pry', '~> 0.15.0'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end

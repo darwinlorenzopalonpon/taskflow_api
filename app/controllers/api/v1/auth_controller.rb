@@ -27,6 +27,11 @@ class Api::V1::AuthController < ApplicationController
     render json: { error: "Authentication failed" }, status: :unauthorized
   end
 
+  def logout
+    cookies.delete(:jwt, secure: true, http_only: true, same_site: :strict)
+    render json: { message: "Logged out successfully" }
+  end
+
   private
 
   def handle_callback
@@ -36,10 +41,15 @@ class Api::V1::AuthController < ApplicationController
     @current_user = User.find_or_create_by_oauth(auth_hash)
     token = @current_user.generate_jwt_token
 
-    redirect_url = "#{frontend_url}?token=#{token}"
-    Rails.logger.debug "Redirecting to: #{redirect_url}"
+    cookies[:jwt] = {
+      value: token,
+      http_only: true,
+      secure: Rails.env.production?,
+      same_site: :strict,
+      expires: 24.hours.from_now
+    }
 
-    redirect_to redirect_url
+    redirect_to "#{frontend_url}?auth_success=true"
   end
 
   def frontend_url

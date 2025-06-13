@@ -2,7 +2,7 @@ module Api
   module V1
     class ProjectMembershipsController < BaseController
       before_action :set_project
-      before_action :set_project_membership, only: [:show, :update, :destroy]
+      before_action :set_project_membership, only: [ :show, :update, :destroy ]
 
       def index
         @project_memberships = policy_scope(@project.project_memberships)
@@ -36,7 +36,7 @@ module Api
       def update
         authorize @project_membership
 
-        if @project_membership.role == 'owner'
+        if @project_membership.role == "owner"
           render json: { error: "Project owner cannot be changed" },
                  status: :unprocessable_entity
           return
@@ -53,7 +53,7 @@ module Api
       def destroy
         authorize @project_membership
 
-        if @project_membership.role == 'owner'
+        if @project_membership.role == "owner"
           render json: { error: "Project owner cannot be removed" },
                  status: :unprocessable_entity
           return

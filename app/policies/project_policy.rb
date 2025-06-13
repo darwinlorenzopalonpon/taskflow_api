@@ -14,14 +14,14 @@ class ProjectPolicy < ApplicationPolicy
   def update?
     user.project_memberships.exists?(
       project: record,
-      role: ['owner', 'admin']
+      role: [ "owner", "admin" ]
     )
   end
 
   def destroy?
     user.project_memberships.exists?(
       project: record,
-      role: ['owner', 'admin']
+      role: [ "owner", "admin" ]
     )
   end
 

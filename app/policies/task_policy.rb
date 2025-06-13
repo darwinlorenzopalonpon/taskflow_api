@@ -14,7 +14,7 @@ class TaskPolicy < ApplicationPolicy
   def destroy?
     user.project_memberships.exists?(
       project: record.project,
-      role: ['owner', 'admin']
+      role: [ "owner", "admin" ]
     )
   end
 

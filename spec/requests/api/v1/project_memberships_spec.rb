@@ -20,7 +20,7 @@ RSpec.describe 'ProjectMemberships API', type: :request do
       expect(response).to have_http_status(:created)
       body = JSON.parse(response.body)
       expect(body['user_id']).to eq(invitee.id)
-      expect(body['role']).to     eq('member')
+      expect(body['role']).to eq('member')
     end
   end
 

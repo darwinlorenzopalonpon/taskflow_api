@@ -1,7 +1,7 @@
 module Api
   module V1
     class ProjectsController < BaseController
-      before_action :set_project, only: [:show, :update, :destroy]
+      before_action :set_project, only: [ :show, :update, :destroy ]
 
       def index
         @projects = policy_scope(Project)
@@ -19,7 +19,7 @@ module Api
         if @project.save
           @project.project_memberships.create!(
             user: current_user,
-            role: 'owner'
+            role: "owner"
           )
           render json: @project, status: :created
         else

@@ -12,7 +12,7 @@ RSpec.describe 'Projects API', type: :request do
       expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
 
-      expect(json.map{ |p| p['id'] }).to include(project.id)
+      expect(json.map { |p| p['id'] }).to include(project.id)
     end
   end
 

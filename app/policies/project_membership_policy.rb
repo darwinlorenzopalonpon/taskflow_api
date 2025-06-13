@@ -2,25 +2,25 @@ class ProjectMembershipPolicy < ApplicationPolicy
   def create?
     user.project_memberships.exists?(
       project: record.project,
-      role: 'owner'
+      role: "owner"
     )
   end
 
   def update?
-    return false if record.role == 'owner'
+    return false if record.role == "owner"
 
     user.project_memberships.exists?(
       project: record.project,
-      role: ['owner', 'admin']
+      role: [ "owner", "admin" ]
     )
   end
 
   def destroy?
-    return false if record.role == 'owner'
+    return false if record.role == "owner"
 
     user.project_memberships.exists?(
       project: record.project,
-      role: ['owner', 'admin']
+      role: [ "owner", "admin" ]
     )
   end
 

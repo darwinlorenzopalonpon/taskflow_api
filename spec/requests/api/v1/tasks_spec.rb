@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Tasks API', type: :request do
   let(:owner)   { create(:user) }
   let(:member)  { create(:user) }
-  let(:stranger){ create(:user) }
+  let(:stranger) { create(:user) }
 
   let(:project) { create(:project, user: owner) }
   let!(:owner_membership)   { create(:project_membership, user: owner,   project: project, role: 'owner') }

@@ -2,7 +2,7 @@ module Api
   module V1
     class TasksController < BaseController
       before_action :set_project
-      before_action :set_task, only: [:show, :update, :destroy]
+      before_action :set_task, only: [ :show, :update, :destroy ]
 
       def index
         @tasks = policy_scope(Task).where(project: @project)

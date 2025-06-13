@@ -3,15 +3,6 @@ Rails.application.routes.draw do
   get "/auth/:provider/callback", to: "api/v1/auth#callback"
   get "/auth/failure", to: "api/v1/auth#failure"
 
-  namespace :api do
-    namespace :v1 do
-      get "projects/index"
-      get "projects/show"
-      get "projects/create"
-      get "projects/update"
-      get "projects/destroy"
-    end
-  end
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       # Auth routes
@@ -20,6 +11,7 @@ Rails.application.routes.draw do
       # Other API resources
       resources :projects do
         resources :tasks
+        resources :project_memberships
       end
       resources :users, only: [ :index ]
     end

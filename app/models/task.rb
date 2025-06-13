@@ -16,4 +16,15 @@ class Task < ApplicationRecord
   }
 
   validates :title, presence: true
+  validate :assigned_user_is_project_member
+
+  private
+
+  def assigned_user_is_project_member
+    return unless user_id_changed? && user_id.present?
+
+    return if project.project_memberships.exists?(user_id: user_id)
+
+    errors.add(:user, "must be a member of the project")
+  end
 end

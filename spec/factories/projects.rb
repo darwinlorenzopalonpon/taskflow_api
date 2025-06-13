@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :project do
-    name { "MyString" }
-    description { "MyText" }
-    deadline { "2025-06-02" }
-    user { nil }
+    name { Faker::App.name }
+    description { Faker::Lorem.sentence }
+    deadline { 2.weeks.from_now }
+    user { association(:user) }
   end
 end

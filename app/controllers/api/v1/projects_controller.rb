@@ -1,45 +1,59 @@
-class Api::V1::ProjectsController < ApplicationController
-  before_action :set_project, only: [ :show, :update, :destroy ]
+module Api
+  module V1
+    class ProjectsController < BaseController
+      before_action :set_project, only: [:show, :update, :destroy]
 
-  def index
-    @projects = @current_user.projects
-    render json: @projects, status: :ok
-  end
+      def index
+        @projects = policy_scope(Project)
+        render json: @projects
+      end
 
-  def show
-    render json: @project, status: :ok
-  end
+      def show
+        render json: @project
+      end
 
-  def create
-    @project = @current_user.projects.build(project_params)
+      def create
+        @project = Project.new(project_params.merge(user: current_user))
+        authorize @project
 
-    if @project.save
-      render json: @project, status: :created
-    else
-      render json: { errors: @project.errors }, status: :unprocessable_entity
+        if @project.save
+          @project.project_memberships.create!(
+            user: current_user,
+            role: 'owner'
+          )
+          render json: @project, status: :created
+        else
+          render json: { errors: @project.errors.full_messages },
+                 status: :unprocessable_entity
+        end
+      end
+
+      def update
+        authorize @project
+
+        if @project.update(project_params)
+          render json: @project
+        else
+          render json: { errors: @project.errors.full_messages },
+                 status: :unprocessable_entity
+        end
+      end
+
+      def destroy
+        authorize @project
+        @project.destroy
+        head :no_content
+      end
+
+      private
+
+      def set_project
+        @project = Project.find(params[:id])
+      end
+
+      def project_params
+        params.require(:project).permit(:name, :description, :deadline)
+      end
     end
   end
-
-  def update
-    if @project.update(project_params)
-      render json: @project
-    else
-      render json: { errors: @project.errors }, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    @project.destroy
-    render json: { message: "Project deleted successfully" }, status: :no_content
-  end
-
-  private
-
-    def set_project
-      @project = @current_user.projects.find(params[:id])
-    end
-
-    def project_params
-      params.require(:project).permit(:name, :description, :deadline)
-    end
 end

@@ -3,7 +3,7 @@ class ProjectMembership < ApplicationRecord
   belongs_to :project
 
   validates_uniqueness_of :user_id, scope: :project_id
-  validates :role, inclusion: { in: %w[owner admin member viewer] }
+  validates :role, inclusion: { in: %w[owner admin member guest] }
 
   before_validation :set_default_role
 

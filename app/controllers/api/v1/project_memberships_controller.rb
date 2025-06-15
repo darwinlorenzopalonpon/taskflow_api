@@ -16,8 +16,18 @@ module Api
       end
 
       def create
-        @project_membership = @project.project_memberships.new(project_membership_params)
+        @project_membership = @project.project_memberships.new
         authorize @project_membership
+        @project_membership.user_id = params.dig(:project_membership, :user_id)
+        allowed_roles = %w[member guest]
+        provided_role = params.dig(:project_membership, :role)
+        if !allowed_roles.include?(provided_role)
+          render json: { error: "Invalid role" },
+                 status: :unprocessable_entity
+          return
+        else
+          @project_membership.role = provided_role
+        end
 
         if @project.project_memberships.exists?(user_id: @project_membership.user_id)
           render json: { error: "User already a member of the project" },
@@ -41,8 +51,17 @@ module Api
                  status: :unprocessable_entity
           return
         end
+        allowed_roles = %w[member guest admin]
+        provided_role = params.dig(:project_membership, :role)
+        if !allowed_roles.include?(provided_role)
+          render json: { error: "Invalid role" },
+                 status: :unprocessable_entity
+          return
+        else
+          @project_membership.role = provided_role
+        end
 
-        if @project_membership.update(project_membership_params)
+        if @project_membership.save
           render json: @project_membership
         else
           render json: { errors: @project_membership.errors.full_messages },
@@ -73,10 +92,6 @@ module Api
 
       def set_project_membership
         @project_membership = @project.project_memberships.find(params[:id])
-      end
-
-      def project_membership_params
-        params.require(:project_membership).permit(:user_id, :role)
       end
     end
   end

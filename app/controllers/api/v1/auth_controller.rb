@@ -1,5 +1,5 @@
 class Api::V1::AuthController < ApplicationController
-  skip_before_action :authenticate_user!, only: [ :google, :github, :callback, :failure ]
+  skip_before_action :authenticate_user!, only: [ :google, :github, :callback, :failure, :logout ]
 
   def google
     Rails.logger.debug "==== GOOGLE AUTH CALLBACK ===="

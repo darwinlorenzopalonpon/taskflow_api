@@ -7,12 +7,12 @@ module Api
       def index
         @project_memberships = policy_scope(@project.project_memberships)
         authorize @project, :show?
-        render json: @project_memberships
+        render json: ProjectMembershipSerializer.render(@project_memberships, view: :team)
       end
 
       def show
         authorize @project_membership
-        render json: @project_membership
+        render json: ProjectMembershipSerializer.render(@project_membership, view: :team)
       end
 
       def create

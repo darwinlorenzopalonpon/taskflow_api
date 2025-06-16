@@ -6,11 +6,11 @@ module Api
 
       def index
         @tasks = policy_scope(Task).where(project: @project)
-        render json: @tasks
+        render json: TaskSerializer.render(@tasks, view: :board)
       end
 
       def show
-        render json: @task
+        render json: TaskSerializer.render(@task, view: :detailed)
       end
 
       def create
@@ -18,7 +18,8 @@ module Api
         authorize @task
 
         if @task.save
-          render json: @task, status: :created
+          render json: TaskSerializer.render(@task, view: :detailed),
+                 status: :created
         else
           render json: { errors: @task.errors.full_messages },
                  status: :unprocessable_entity
@@ -29,7 +30,7 @@ module Api
         authorize @task
 
         if @task.update(task_params)
-          render json: @task
+          render json: TaskSerializer.render(@task, view: :detailed)
         else
           render json: { errors: @task.errors.full_messages },
                  status: :unprocessable_entity

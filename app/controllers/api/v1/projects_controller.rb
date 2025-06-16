@@ -5,11 +5,11 @@ module Api
 
       def index
         @projects = policy_scope(Project)
-        render json: @projects
+        render json: ProjectSerializer.render(@projects, view: :list)
       end
 
       def show
-        render json: @project
+        render json: ProjectSerializer.render(@project, view: :detailed)
       end
 
       def create
@@ -21,7 +21,8 @@ module Api
             user: current_user,
             role: "owner"
           )
-          render json: @project, status: :created
+          render json: ProjectSerializer.render(@project, view: :detailed),
+                 status: :created
         else
           render json: { errors: @project.errors.full_messages },
                  status: :unprocessable_entity
@@ -32,7 +33,7 @@ module Api
         authorize @project
 
         if @project.update(project_params)
-          render json: @project
+          render json: ProjectSerializer.render(@project, view: :detailed)
         else
           render json: { errors: @project.errors.full_messages },
                  status: :unprocessable_entity
